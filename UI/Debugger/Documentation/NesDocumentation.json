@@ -36,7 +36,7 @@
 		{
 			"op": "bit",
 			"name": "BIT - Bit Test",
-			"description": "Bits 6 and 7 of the byte at the specified memory address are copied to the negative (N) and overflow (V) flags. If the accumulator's value ANDed with that byte is 0, the zero flag (Z) is set (otherwise it is cleared).",
+			"description": "Bits 7 and 6 of the byte at the specified memory address are copied to the negative (N) and overflow (V) flags. If the accumulator's value ANDed with that byte is 0, the zero flag (Z) is set (otherwise it is cleared).",
 			"flags": ["Zero", "Overflow", "Negative"]
 		},
 		{
