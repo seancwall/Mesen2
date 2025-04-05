@@ -40,6 +40,8 @@ ifeq ($(UNAME_S),Darwin)
 	LINKCHECKUNRESOLVED :=
 endif
 
+MESENFLAGS += -m64
+
 MACHINE := $(shell uname -m)
 ifeq ($(MACHINE),x86_64)
 	MESENPLATFORM := $(MESENOS)-x64
@@ -51,8 +53,13 @@ endif
 ifneq ($(filter arm%,$(MACHINE)),)
 	MESENPLATFORM := $(MESENOS)-arm64
 endif
-
-MESENFLAGS += -m64
+ifeq ($(MACHINE),aarch64)
+	MESENPLATFORM := $(MESENOS)-arm64
+	ifeq ($(USE_GCC),true)
+		#don't set -m64 on arm64 for gcc (unrecognized option)
+		MESENFLAGS=
+	endif
+endif
 
 DEBUG ?= 0
 

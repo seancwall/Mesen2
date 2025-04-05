@@ -10,6 +10,7 @@ enum class EmulationFlags
 	MaximumSpeed = 0x04,
 	InBackground = 0x08,
 	ConsoleMode = 0x10,
+	TestMode = 0x20,
 };
 
 enum class ScaleFilterType
@@ -660,6 +661,7 @@ struct NesConfig
 	bool ReduceDmcPopping = false;
 	bool SilenceTriangleHighFreq = false;
 	bool SwapDutyCycles = false;
+	bool ReverseDpcmBitOrder = false;
 
 	bool BreakOnCrash = false;
 
@@ -774,6 +776,13 @@ struct AudioPlayerConfig
 	bool Shuffle = false;
 };
 
+enum class GbaDisassemblyMode : uint8_t
+{
+	Default,
+	Arm,
+	Thumb
+};
+
 struct DebugConfig
 {
 	bool BreakOnUninitRead = false;
@@ -799,8 +808,13 @@ struct DebugConfig
 	bool SnesBreakOnCop = false;
 	bool SnesBreakOnWdm = false;
 	bool SnesBreakOnStp = false;
+	bool SnesBreakOnInvalidPpuAccess = false;
+	bool SnesBreakOnReadDuringAutoJoy = false;
 	bool SnesUseAltSpcOpNames = false;
 	bool SnesIgnoreDspReadWrites = false;
+
+	bool SpcBreakOnBrk = false;
+	bool SpcBreakOnStpSleep = false;
 
 	bool GbBreakOnInvalidOamAccess = false;
 	bool GbBreakOnInvalidVramAccess = false;
@@ -811,12 +825,15 @@ struct DebugConfig
 
 	bool NesBreakOnBrk = false;
 	bool NesBreakOnUnofficialOpCode = false;
+	bool NesBreakOnUnstableOpCode = false;
 	bool NesBreakOnCpuCrash = false;
 	bool NesBreakOnBusConflict = false;
 	bool NesBreakOnDecayedOamRead = false;
-	bool NesBreakOnPpu2000ScrollGlitch = false;
-	bool NesBreakOnPpu2006ScrollGlitch = false;
+	bool NesBreakOnPpuScrollGlitch = false;
 	bool NesBreakOnExtOutputMode = false;
+	bool NesBreakOnInvalidVramAccess = false;
+	bool NesBreakOnInvalidOamWrite = false;
+	bool NesBreakOnDmaInputRead = false;
 
 	bool PceBreakOnBrk = false;
 	bool PceBreakOnUnofficialOpCode = false;
@@ -827,6 +844,7 @@ struct DebugConfig
 	bool GbaBreakOnNopLoad = false;
 	bool GbaBreakOnInvalidOpCode = false;
 	bool GbaBreakOnUnalignedMemAccess = false;
+	GbaDisassemblyMode GbaDisMode;
 	
 	bool WsBreakOnInvalidOpCode = false;
 

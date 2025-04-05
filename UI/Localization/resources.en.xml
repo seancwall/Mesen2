@@ -319,6 +319,7 @@
 			<Control ID="lblPanning">Channel panning</Control>
 			<Control ID="lblAdvanced">Advanced</Control>
 			<Control ID="chkSwapDutyCycles">Swap square channels duty cycles (mimics old clones)</Control>
+			<Control ID="chkReverseDpcmBitOrder">Reverse DPCM bit order (higher or lower quality, depends on game)</Control>
 			<Control ID="chkSilenceTriangleHighFreq">Mute ultrasonic frequencies on triangle channel (reduces popping)</Control>
 			<Control ID="chkReduceDmcPopping">Reduce popping sounds on the DMC channel</Control>
 			<Control ID="chkDisableNoiseModeFlag">Disable noise channel mode flag (mimics oldest Famicom models)</Control>
@@ -1342,32 +1343,43 @@
 			<Control ID="chkUseLowerCaseDisassembly">Use lower case</Control>
 			<Control ID="chkShowJumpLabels">Show jump/sub labels</Control>
 			<Control ID="chkSnesUseAltSpcOpNames">Use 6502-like mnemonics</Control>
-			
+			<Control ID="lblDisassemblyMode">CPU mode:</Control>
+			<Control ID="lblDisassemblyModeHint">Controls whether unidentified code is disassembled as ARM or Thumb.</Control>
+
 			<Control ID="lblBreakOptions">Break on...</Control>
 			<Control ID="chkBreakOnBrk">BRK</Control>
 			<Control ID="chkBreakOnCop">COP</Control>
 			<Control ID="chkBreakOnWdm">WDM</Control>
 			<Control ID="chkBreakOnStp">STP</Control>
+			<Control ID="chkBreakOnInvalidPpuAccess">Invalid PPU memory access</Control>
+			<Control ID="chkBreakOnReadDuringAutoJoy">Controller read during auto-read</Control>
+			
+			<Control ID="chkSpcBreakOnStpSleep">STOP / SLEEP</Control>
+			
 			<Control ID="chkBreakOnUninitRead">Uninitialized memory read</Control>
 			<Control ID="chkBreakOnOpen">Debugger opened</Control>
 			<Control ID="chkBreakOnPowerCycleReset">Power/reset</Control>
 
 			<Control ID="chkBreakOnUnofficialOpCode">Unofficial opcodes</Control>
+			<Control ID="chkBreakOnUnstableOpCode">Unstable opcodes</Control>
+			<Control ID="chkBreakOnUnstableOpCodeHint">Breaks on "ANE #imm" ($8B) and "LAX #imm" ($AB)&#10;Both opcodes are unstable on hardware and their results are usually unreliable.</Control>
 			<Control ID="chkBreakOnCpuCrash">CPU crash</Control>
 			<Control ID="chkBreakOnBusConflict">Bus conflict</Control>
 			<Control ID="chkBreakOnDecayedOamRead">Decayed OAM read</Control>
-			<Control ID="chkBreakOnPpu2000ScrollGlitch">PPU $2000/5/6 scroll glitch</Control>
-			<Control ID="chkBreakOnPpu2006ScrollGlitch">PPU $2006 scroll glitch</Control>
+			<Control ID="chkBreakOnPpuScrollGlitch">PPU scroll glitch</Control>
+			<Control ID="chkNesInvalidVramAccess">Invalid VRAM access</Control>
+			<Control ID="chkNesInvalidOamWrite">Invalid OAM write</Control>
+			<Control ID="chkNesDmaInputRead">DMA controller read</Control>
 			<Control ID="chkNesBreakOnExtOutputMode">PPU EXT output mode</Control>
 
-			<Control ID="chkGbBreakOnInvalidOamAccess">Break on invalid OAM access</Control>
-			<Control ID="chkGbBreakOnInvalidVramAccess">Break on invalid VRAM access</Control>
-			<Control ID="chkGbBreakOnDisableLcdOutsideVblank">Break on LCD disable outside vblank</Control>
-			<Control ID="chkGbBreakOnInvalidOpCode">Break on invalid instructions</Control>
-			<Control ID="chkGbBreakOnNopLoad">Break on LD B, B (nop)</Control>
-			<Control ID="chkGbBreakOnOamCorruption">Break on OAM corruption</Control>
+			<Control ID="chkGbBreakOnInvalidOamAccess">Invalid OAM access</Control>
+			<Control ID="chkGbBreakOnInvalidVramAccess">Invalid VRAM access</Control>
+			<Control ID="chkGbBreakOnDisableLcdOutsideVblank">LCD disable outside vblank</Control>
+			<Control ID="chkGbBreakOnInvalidOpCode">Invalid instructions</Control>
+			<Control ID="chkGbBreakOnNopLoad">LD B, B (nop)</Control>
+			<Control ID="chkGbBreakOnOamCorruption">OAM corruption</Control>
 
-			<Control ID="chkPceBreakOnInvalidVramAddress">Break on invalid VRAM address</Control>
+			<Control ID="chkPceBreakOnInvalidVramAddress">Invalid VRAM address</Control>
 
 			<Control ID="chkGbaBreakOnInvalidOpCode">Break on invalid instructions</Control>
 			<Control ID="chkGbaBreakOnNopLoad">Break on MOV R11, R11 (nop)</Control>
@@ -2545,6 +2557,11 @@ E
 			<Value ID="Enabled">Enabled</Value>
 			<Value ID="Disabled">Disabled</Value>
 		</Enum>
+		<Enum ID="GbaDisassemblyMode">
+			<Value ID="Default">Auto</Value>
+			<Value ID="Arm">ARM</Value>
+			<Value ID="Thumb">Thumb</Value>
+		</Enum>
 
 		<Enum ID="MemorySizes">
 			<Value ID="None">None</Value>
@@ -2944,9 +2961,13 @@ E
 			<Value ID="NesBreakOnPpu2000ScrollGlitch">$2000/5/6 scroll glitch</Value>
 			<Value ID="NesBreakOnPpu2006ScrollGlitch">$2006 scroll glitch</Value>
 			<Value ID="BreakOnUnofficialOpCode">Unofficial OP</Value>
+			<Value ID="BreakOnUnstableOpCode">Unstable OP</Value>
 			<Value ID="NesBusConflict">Bus conflict</Value>
 			<Value ID="NesBreakOnCpuCrash">CPU crashed</Value>
 			<Value ID="NesBreakOnExtOutputMode">PPU EXT output mode</Value>
+			<Value ID="NesInvalidVramAccess">Invalid VRAM access</Value>
+			<Value ID="NesInvalidOamWrite">Invalid OAM access</Value>
+			<Value ID="NesDmaInputRead">DMA controller read</Value>
 			
 			<Value ID="PceBreakOnInvalidVramAddress">Invalid VRAM address (>= $8000)</Value>
 
@@ -2955,6 +2976,9 @@ E
 			<Value ID="GbaNopLoad">MOV R11, R11 (NOP)</Value>
 			<Value ID="GbaInvalidOpCode">Invalid instruction</Value>
 			<Value ID="GbaUnalignedMemoryAccess">Unaligned memory access</Value>
+
+			<Value ID="SnesReadDuringAutoJoy">Controller read during auto-read</Value>
+			<Value ID="SnesInvalidPpuAccess">Invalid PPU memory access</Value>
 
 			<Value ID="BreakOnUndefinedOpCode">Undefined OP</Value>
 		</Enum>

@@ -88,6 +88,9 @@ void SnesControlManager::UpdateControlDevices()
 uint8_t SnesControlManager::Read(uint16_t addr, bool forAutoRead)
 {
 	if(!forAutoRead) {
+		if(_console->GetInternalRegisters()->IsAutoReadActive()) {
+			_emu->BreakIfDebugging(CpuType::Snes, BreakSource::SnesReadDuringAutoJoy);
+		}
 		_console->GetInternalRegisters()->ProcessAutoJoypad();
 		SetInputReadFlag();
 	}
@@ -95,6 +98,11 @@ uint8_t SnesControlManager::Read(uint16_t addr, bool forAutoRead)
 	uint8_t value = _console->GetMemoryManager()->GetOpenBus() & (addr == 0x4016 ? 0xFC : 0xE0);
 	for(shared_ptr<BaseControlDevice> &device : _controlDevices) {
 		value |= device->ReadRam(addr);
+	}
+
+	if(addr == 0x4017) {
+		//These bits are always set to 1 for 4017
+		value |= 0x1C;
 	}
 
 	return value;
