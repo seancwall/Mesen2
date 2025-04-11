@@ -175,6 +175,8 @@ void MessageManager::Log(string message)
 		_log.pop_front();
 	}
 	_log.push_back(message);
+
+	std::cout << message << std::endl;
 }
 
 void MessageManager::ClearLog()

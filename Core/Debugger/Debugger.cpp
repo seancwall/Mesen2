@@ -1046,6 +1046,8 @@ void Debugger::Log(string message)
 		_debuggerLog.pop_front();
 	}
 	_debuggerLog.push_back(message);
+
+	std::cout << message << std::endl;
 }
 
 string Debugger::GetLog()
