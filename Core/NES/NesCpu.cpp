@@ -30,7 +30,7 @@ NesCpu::NesCpu(NesConsole* console)
 		&NesCpu::BVC,	&NesCpu::EOR,	&NesCpu::HLT,	&NesCpu::SRE,	&NesCpu::NOP,	&NesCpu::EOR,	&NesCpu::LSR_Memory,	&NesCpu::SRE,	&NesCpu::CLI,	&NesCpu::EOR,	&NesCpu::NOP,			&NesCpu::SRE,	&NesCpu::NOP,			&NesCpu::EOR,	&NesCpu::LSR_Memory,	&NesCpu::SRE, //5
 		&NesCpu::RTS,	&NesCpu::ADC,	&NesCpu::HLT,	&NesCpu::RRA,	&NesCpu::NOP,	&NesCpu::ADC,	&NesCpu::ROR_Memory,	&NesCpu::RRA,	&NesCpu::PLA,	&NesCpu::ADC,	&NesCpu::ROR_Acc,		&NesCpu::ARR,	&NesCpu::JMP_Ind,		&NesCpu::ADC,	&NesCpu::ROR_Memory,	&NesCpu::RRA, //6
 		&NesCpu::BVS,	&NesCpu::ADC,	&NesCpu::HLT,	&NesCpu::RRA,	&NesCpu::NOP,	&NesCpu::ADC,	&NesCpu::ROR_Memory,	&NesCpu::RRA,	&NesCpu::SEI,	&NesCpu::ADC,	&NesCpu::NOP,			&NesCpu::RRA,	&NesCpu::NOP,			&NesCpu::ADC,	&NesCpu::ROR_Memory,	&NesCpu::RRA, //7
-		&NesCpu::NOP,	&NesCpu::STA,	&NesCpu::NOP,	&NesCpu::SAX,	&NesCpu::STY,	&NesCpu::STA,	&NesCpu::STX,			&NesCpu::SAX,	&NesCpu::DEY,	&NesCpu::NOP,	&NesCpu::TXA,			&NesCpu::UNK,	&NesCpu::STY,			&NesCpu::STA,	&NesCpu::STX,			&NesCpu::SAX, //8
+		&NesCpu::NOP,	&NesCpu::STA,	&NesCpu::NOP,	&NesCpu::SAX,	&NesCpu::STY,	&NesCpu::STA,	&NesCpu::STX,			&NesCpu::SAX,	&NesCpu::DEY,	&NesCpu::NOP,	&NesCpu::TXA,			&NesCpu::ANE,	&NesCpu::STY,			&NesCpu::STA,	&NesCpu::STX,			&NesCpu::SAX, //8
 		&NesCpu::BCC,	&NesCpu::STA,	&NesCpu::HLT,	&NesCpu::SHAZ,	&NesCpu::STY,	&NesCpu::STA,	&NesCpu::STX,			&NesCpu::SAX,	&NesCpu::TYA,	&NesCpu::STA,	&NesCpu::TXS,			&NesCpu::TAS,	&NesCpu::SHY,			&NesCpu::STA,	&NesCpu::SHX,			&NesCpu::SHAA,//9
 		&NesCpu::LDY,	&NesCpu::LDA,	&NesCpu::LDX,	&NesCpu::LAX,	&NesCpu::LDY,	&NesCpu::LDA,	&NesCpu::LDX,			&NesCpu::LAX,	&NesCpu::TAY,	&NesCpu::LDA,	&NesCpu::TAX,			&NesCpu::ATX,	&NesCpu::LDY,			&NesCpu::LDA,	&NesCpu::LDX,			&NesCpu::LAX, //A
 		&NesCpu::BCS,	&NesCpu::LDA,	&NesCpu::HLT,	&NesCpu::LAX,	&NesCpu::LDY,	&NesCpu::LDA,	&NesCpu::LDX,			&NesCpu::LAX,	&NesCpu::CLV,	&NesCpu::LDA,	&NesCpu::TSX,			&NesCpu::LAS,	&NesCpu::LDY,			&NesCpu::LDA,	&NesCpu::LDX,			&NesCpu::LAX, //B
@@ -45,7 +45,7 @@ NesCpu::NesCpu(NesConsole* console)
 	//	0			1				2			3				4				5				6				7				8			9			A			B			C			D			E			F
 		M::Imp,	M::IndX,		M::None,	M::IndX,		M::Zero,		M::Zero,		M::Zero,		M::Zero,		M::Imp,	M::Imm,	M::Acc,	M::Imm,	M::Abs,	M::Abs,	M::Abs,	M::Abs,	//0
 		M::Rel,	M::IndY,		M::None,	M::IndYW,	M::ZeroX,	M::ZeroX,	M::ZeroX,	M::ZeroX,	M::Imp,	M::AbsY,	M::Imp,	M::AbsYW,M::AbsX,	M::AbsX,	M::AbsXW,M::AbsXW,//1
-		M::Abs,	M::IndX,		M::None,	M::IndX,		M::Zero,		M::Zero,		M::Zero,		M::Zero,		M::Imp,	M::Imm,	M::Acc,	M::Imm,	M::Abs,	M::Abs,	M::Abs,	M::Abs,	//2
+		M::Other,M::IndX,		M::None,	M::IndX,		M::Zero,		M::Zero,		M::Zero,		M::Zero,		M::Imp,	M::Imm,	M::Acc,	M::Imm,	M::Abs,	M::Abs,	M::Abs,	M::Abs,	//2
 		M::Rel,	M::IndY,		M::None,	M::IndYW,	M::ZeroX,	M::ZeroX,	M::ZeroX,	M::ZeroX,	M::Imp,	M::AbsY,	M::Imp,	M::AbsYW,M::AbsX,	M::AbsX,	M::AbsXW,M::AbsXW,//3
 		M::Imp,	M::IndX,		M::None,	M::IndX,		M::Zero,		M::Zero,		M::Zero,		M::Zero,		M::Imp,	M::Imm,	M::Acc,	M::Imm,	M::Abs,	M::Abs,	M::Abs,	M::Abs,	//4
 		M::Rel,	M::IndY,		M::None,	M::IndYW,	M::ZeroX,	M::ZeroX,	M::ZeroX,	M::ZeroX,	M::Imp,	M::AbsY,	M::Imp,	M::AbsYW,M::AbsX,	M::AbsX,	M::AbsXW,M::AbsXW,//5
@@ -94,7 +94,7 @@ void NesCpu::Reset(bool softReset, ConsoleRegion region)
 	_abortDmcDma = false;
 	_isDmcDmaRead = false;
 	_cpuWrite = false;
-	_lastCrashWarning = 0;
+	_hideCrashWarning = false;
 
 	//Use _memoryManager->Read() directly to prevent clocking the PPU/APU when setting PC at reset
 	_state.PC = _memoryManager->Read(NesCpu::ResetVector) | _memoryManager->Read(NesCpu::ResetVector+1) << 8;
@@ -287,26 +287,8 @@ uint16_t NesCpu::FetchOperand()
 		case NesAddrMode::AbsY: return GetAbsYAddr(false);
 		case NesAddrMode::AbsYW: return GetAbsYAddr(true);
 		case NesAddrMode::Other: return 0; //Do nothing, op is handled specifically
-		default: break;
+		default: return 0;
 	}
-	
-#if !defined(DUMMYCPU)
-	if(_lastCrashWarning == 0 || _state.CycleCount - _lastCrashWarning > 5000000) {
-		MessageManager::DisplayMessage("Error", "GameCrash", "Invalid OP code - CPU crashed.");
-		_lastCrashWarning = _state.CycleCount;
-	}
-
-	_emu->BreakIfDebugging(CpuType::Nes, BreakSource::NesBreakOnCpuCrash);
-	
-	if(!_emu->IsDebugging() && _console->GetRomFormat() == RomFormat::Nsf) {
-		//For NSF files, reset cpu if it ever crashes
-		_emu->Reset();
-	}
-	
-	return 0;
-#else 
-	return 0;
-#endif
 }
 
 void NesCpu::EndCpuCycle(bool forRead)
@@ -584,6 +566,30 @@ void NesCpu::SetMasterClockDivider(ConsoleRegion region)
 			_endClockCount = 8;
 			break;
 	}
+}
+
+void NesCpu::HLT()
+{
+	//Freeze the CPU, implemented by jumping back and re-executing this op infinitely (for performance reasons)
+	_state.PC -= 1;
+
+	//Prevent IRQ/NMI
+	_prevRunIrq = false;
+	_prevNeedNmi = false;
+
+#if !defined(DUMMYCPU)
+	if(!_hideCrashWarning) {
+		_hideCrashWarning = true;
+
+		MessageManager::DisplayMessage("Error", "GameCrash", "Invalid OP code - CPU crashed.");
+		_emu->BreakIfDebugging(CpuType::Nes, BreakSource::NesBreakOnCpuCrash);
+
+		if(!_emu->IsDebugging() && _console->GetRomFormat() == RomFormat::Nsf) {
+			//For NSF files, reset cpu if it ever crashes
+			_emu->Reset();
+		}
+	}
+#endif
 }
 
 void NesCpu::Serialize(Serializer &s)

@@ -43,6 +43,7 @@ public enum GbaDmaAddrMode : byte
 
 public struct GbaDmaChannel
 {
+	public UInt64 StartClock;
 	public UInt32 ReadValue;
 
 	public UInt32 Destination;
@@ -306,13 +307,20 @@ public struct GbaCpuState : BaseState
 	public UInt64 CycleCount;
 }
 
+public enum GbaBgStereoMode : byte
+{
+	Disabled,
+	EvenColumns,
+	OddColumns,
+	Both
+}
+
 public struct GbaBgConfig
 {
 	public UInt16 Control;
 	public UInt16 TilemapAddr;
 	public UInt16 TilesetAddr;
 	public UInt16 ScrollX;
-	public UInt16 ScrollXLatch;
 	public UInt16 ScrollY;
 	public byte ScreenSize;
 	[MarshalAs(UnmanagedType.I1)] public bool DoubleWidth;
@@ -323,6 +331,8 @@ public struct GbaBgConfig
 	[MarshalAs(UnmanagedType.I1)] public bool Bpp8Mode;
 	[MarshalAs(UnmanagedType.I1)] public bool Enabled;
 	public byte EnableTimer;
+	public byte DisableTimer;
+	public GbaBgStereoMode StereoMode;
 }
 
 public struct GbaTransformConfig
@@ -338,6 +348,7 @@ public struct GbaTransformConfig
 
 	[MarshalAs(UnmanagedType.I1)] public bool PendingUpdateX;
 	[MarshalAs(UnmanagedType.I1)] public bool PendingUpdateY;
+	[MarshalAs(UnmanagedType.I1)] public bool NeedInit;
 }
 
 public enum GbaPpuBlendEffect : byte
@@ -368,7 +379,8 @@ public struct GbaPpuState : BaseState
 	[MarshalAs(UnmanagedType.I1)] public bool AllowHblankOamAccess;
 	[MarshalAs(UnmanagedType.I1)] public bool ObjVramMappingOneDimension;
 	[MarshalAs(UnmanagedType.I1)] public bool ForcedBlank;
-	[MarshalAs(UnmanagedType.I1)] public bool GreenSwapEnabled;
+	public byte ForcedBlankDisableTimer;
+	[MarshalAs(UnmanagedType.I1)] public bool StereoscopicEnabled;
 
 	public byte Control2;
 	public byte ObjEnableTimer;
@@ -454,7 +466,6 @@ public struct GbaRomPrefetchState
 	public UInt32 PrefetchAddr;
 	public byte ClockCounter;
 	public byte BoundaryCyclePenalty;
-	[MarshalAs(UnmanagedType.I1)] public bool Suspended;
 	[MarshalAs(UnmanagedType.I1)] public bool WasFilled;
 	[MarshalAs(UnmanagedType.I1)] public bool Started;
 	[MarshalAs(UnmanagedType.I1)] public bool Sequential;
